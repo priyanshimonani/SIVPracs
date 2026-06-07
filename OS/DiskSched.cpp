@@ -17,51 +17,36 @@ void fcfs(){
     cout<<"\nTotal head moment: "<<hm;
 } 
 
-void sstf(){
-    int visited[n];
-    sort(req, req+n+1);
-    int si=0;
-    while(req[si]!=s)
-        si++;
-    int ci=si;
-    int done=0;
-    while(done!=n){
-        int ld=100, rd=1000;
-        if(!visited[ci] && ci==0){ //first req
-            cout<<ci<<"\t";
-            visited[ci]=1;
-            while(!visited[ci]) //go to next unvisited
-                ci++;
-            done++;
-        }
-        else if(!visited[ci] && ci==n){
-            cout<<ci<<"\t";
-            visited[ci]=1;
-            while(!visited[ci]) //go to next unvisited
-                ci--;
-            done++;
-        }
-        else{
-            cout<<ci;
-            visited[ci]=1;
-            done++;
-            int i=ci, j=ci;
-            //calc rd
-            while(i<=n){
-                if(!visited[i])
-                    break;
-                i++;
+void sstf()
+{
+    int visited[100]={0};
+    int head=s;
+    hm=0;
+
+    cout<<"\nOrder: "<<head<<"\t";
+
+    for(int k=0;k<n;k++)
+    {
+        int closest=-1;
+        int mind=100000;
+
+        for(int i=0;i<n;i++)
+        {
+            if(!visited[i] && abs(req[i]-head)<mind)
+            {
+                mind=abs(req[i]-head);
+                closest=i;
             }
-            rd=abs(req[ci]-req[i]);
-            while(j<=0){
-                if(!visited[j])
-                    break;
-                j--;
-            }
-            ld=abs(req[ci]-req[j]);
-            ci=(ld<rd)?j:i;
         }
+
+        hm+=mind;
+        head=req[closest];
+
+        cout<<head<<"\t";
+        visited[closest]=1;
     }
+
+    cout<<"\nTotal head movement: "<<hm;
 }
 
 void scan(){ //input direction, rn assuming higher
